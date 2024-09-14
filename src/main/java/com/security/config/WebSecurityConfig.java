@@ -10,16 +10,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-    
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests((request) -> request
-            .requestMatchers(HttpMethod.POST, "/user/**").permitAll()
-            .anyRequest()
-            .authenticated()
+        http.csrf(csrf -> csrf.disable()) // desabilitando o CSRF
+            .cors(cors -> cors.disable()) // desabilitando o CORS 
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(HttpMethod.POST, "/api/v1/user/**").permitAll()
+                .anyRequest().authenticated() // qualquer outra requisição precisa ser autenticada
             );
-    
         return http.build();
     }
 

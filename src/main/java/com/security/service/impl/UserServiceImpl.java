@@ -1,6 +1,8 @@
 package com.security.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.security.model.User;
@@ -9,6 +11,10 @@ import com.security.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();        
+    }
 
     @Autowired
     private UserRespository userRespository;
@@ -19,7 +25,10 @@ public class UserServiceImpl implements UserService {
 
         if (existUser != null) throw new Error("User already exists!");
 
-        return null;
+        user.setPassword(passwordEncoder().encode(user.getPassword()));
+        User createUser = userRespository.save(user);
+
+        return createUser;
     }
     
 }
