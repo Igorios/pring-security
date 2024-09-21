@@ -37,11 +37,11 @@ public class ProductController {
 
     @PreAuthorize("hasRole('PRODUCT_UPDATE')")
     @PutMapping
-    public Product update(Product product) {
+    public Product update(@RequestBody Product product){
         return productService.update(product);
     }
 
-    @PreAuthorize("hasRole('RODUCT_DELETE')")
+    @PreAuthorize("hasRole('PRODUCT_DELETE')")
     @DeleteMapping
     public void delete(@RequestParam("id") Long id) {
         productService.delete(id);

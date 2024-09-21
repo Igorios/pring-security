@@ -30,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product update(Product product) {
-        if (product.getId() != null) {
+        if (product.getId() == null) {
             throw new RuntimeException("ID is null");
         }
 
