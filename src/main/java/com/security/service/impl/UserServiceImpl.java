@@ -1,5 +1,7 @@
 package com.security.service.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,14 +23,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        User existUser = userRespository.findByUsername(user.getUsername());
 
-        if (existUser != null) throw new Error("User already exists!");
+        Optional<User> existUser = userRespository.findByUsername(user.getUsername());
+
+        if (existUser.isPresent()) {
+            throw new IllegalArgumentException("Usuario ja existe!");
+        }
 
         user.setPassword(passwordEncoder().encode(user.getPassword()));
-        User createUser = userRespository.save(user);
 
-        return createUser;
+        return userRespository.save(user);
     }
     
 }

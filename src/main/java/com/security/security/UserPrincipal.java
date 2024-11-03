@@ -5,13 +5,14 @@ import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.security.model.User;
 
 import lombok.Getter;
 
 @Getter
-public class UserPrincipal {
+public class UserPrincipal implements UserDetails {
     
     private String username;
     private String password;

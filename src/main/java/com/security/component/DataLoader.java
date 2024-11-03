@@ -65,8 +65,8 @@ public class DataLoader implements CommandLineRunner {
 
             String password = passwordEncoder().encode("123456");
 
-            User user1 = new User(1l, "teste1@gmail.com", password, permissao1);
-            User user2 = new User(2l, "teste2@gmail.com", password, permissao2);
+            User user1 = new User(1l, "teste1@gmail.com", "teste1@gmail.com",password, permissao1);
+            User user2 = new User(2l, "teste2@gmail.com", "teste2@gmail.com",password, permissao2);
 
             userRespository.saveAll(Arrays.asList(user1, user2));
         }
