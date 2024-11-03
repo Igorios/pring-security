@@ -1,5 +1,8 @@
 package com.security.jwt;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -18,8 +21,6 @@ public class JwtTokenProvider {
 
     private static final String SECRET_KEY = "wR533pkHvoMk";
 
-    private long jwtExpiration = 86400000;
-
     private Algorithm getAlgorithm() {
         return Algorithm.HMAC256(SECRET_KEY);
     }
@@ -27,18 +28,18 @@ public class JwtTokenProvider {
 
     public String generateToken(UserPrincipal userPrincipal) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpiration);
-
         try {
 
             return JWT.create()
                 .withSubject(userPrincipal.getUsername())
+                .withClaim("idUsuario", userPrincipal.getIdUsuario())
                 .withClaim("roles", userPrincipal.getAuthorities().stream()
                     .map(Object::toString)
                     .collect(Collectors.toList()))
                 .withClaim("username", userPrincipal.getUsername())
+                .withClaim("email", userPrincipal.getEmail())
                 .withIssuedAt(now)
-                .withExpiresAt(expiryDate)
+                .withExpiresAt(dataHoraExpiracao())
                 .sign(getAlgorithm())
             ;
 
@@ -64,5 +65,9 @@ public class JwtTokenProvider {
         } catch(JWTVerificationException exception) {
             return false;
         }
+    }
+
+    private Instant dataHoraExpiracao() {
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
 }
